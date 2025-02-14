@@ -1,21 +1,23 @@
-MIT License
 
-Copyright (c) 2025 LeoDeus24
+import streamlit as st
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+st.title("🤖 Chatbot de Recetas de Cocina")
+st.write("¡Bienvenido! Pregunta lo que desees sobre cocina.")
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+# Verificar si el modelo se carga correctamente
+try:
+    chatbot = pipeline("text-generation", model="microsoft/DialoGPT-medium")
+    st.write("✅ Modelo cargado correctamente.")
+except Exception as e:
+    st.write(f"❌ Error al cargar el modelo: {e}")
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+# Entrada del usuario
+user_input = st.text_input("🍽️ ¿Qué deseas saber sobre cocina?")
+
+# Respuesta del chatbot
+if user_input:
+    try:
+        response = chatbot(user_input, max_length=100, pad_token_id=50256)
+        st.write(f"🧑‍🍳 Respuesta del chatbot: {response[0]['generated_text']}")
+    except Exception as e:
+        st.write(f"❌ Error al generar respuesta: {e}")
